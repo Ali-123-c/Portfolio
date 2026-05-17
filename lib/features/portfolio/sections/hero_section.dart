@@ -22,9 +22,14 @@ class HeroSection extends StatelessWidget {
     final sectionHeight = size.height < 700 ? 700.0 : size.height;
 
     return Container(
-      height: sectionHeight,
+      height: isDesktop ? sectionHeight : null, // Wrap content on mobile!
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.only(
+        left: 24,
+        right: 24,
+        top: isDesktop ? 0 : 140, // Push content down below floating AppBar on mobile
+        bottom: isDesktop ? 0 : 60,
+      ),
       alignment: Alignment.center,
       child: MaxWidthContainer(
         maxWidth: 1200,
@@ -37,12 +42,11 @@ class HeroSection extends StatelessWidget {
               )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const SizedBox(height: 100),
-                  Expanded(flex: 4, child: _build3DCanvas(context, false)),
-                  const SizedBox(height: 24),
-                  Expanded(flex: 5, child: _buildTypography(context, false)),
-                  const SizedBox(height: 48),
+                  _build3DCanvas(context, false), // No Expanded on mobile!
+                  const SizedBox(height: 32),
+                  _buildTypography(context, false), // No Expanded on mobile!
                 ],
               ),
       ),
