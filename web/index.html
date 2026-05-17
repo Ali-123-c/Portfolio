@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  
+  <!-- Premium SEO Meta Tags -->
+  <title>Ali | Futuristic Flutter Mobile Developer & C# Backend Engineer</title>
+  <meta name="description" content="Explore Ali's developer portfolio showcasing premium mobile apps built with Flutter & Dart, alongside robust C#/.NET Core backend systems. Highly responsive and feature-rich digital experiences.">
+  <meta name="keywords" content="Ali, Flutter Developer, Dart, Android Developer, Mobile Engineer, C# Developer, .NET Core, Backend Developer, 3D Portfolio, GoRouter, Riverpod">
+  <meta name="author" content="Ali">
+  <meta name="robots" content="index, follow">
+
+  <!-- Viewport and Mobile Optimizations -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ali Portfolio">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- OpenGraph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ali | Futuristic Flutter Mobile Developer & C# Backend Engineer">
+  <meta property="og:description" content="Discover premium mobile architectures, clean Dart code, and scalable .NET services designed and engineered by Ali.">
+  <meta property="og:image" content="icons/Icon-512.png">
+  <meta property="og:url" content="https://ali-portfolio.vercel.app">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ali | Flutter Developer Portfolio">
+  <meta name="twitter:description" content="Explore futuristic, high-performance Flutter mobile apps and robust backend services.">
+  <meta name="twitter:image" content="icons/Icon-512.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <!-- Web Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Google Fonts for Preloader and Web Assets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Model Viewer script for interactive 3D rendering -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" defer></script>
+
+  <!-- High-Tech Preloader Styles -->
+  <style>
+    body {
+      background-color: #0A0A0A;
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+    }
+    #preloader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      background: #0A0A0A;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      flex-direction: column;
+      transition: opacity 0.5s ease-out;
+    }
+    .loader-container {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .ring {
+      width: 120px;
+      height: 120px;
+      border: 0px solid transparent;
+      border-radius: 50%;
+      position: absolute;
+    }
+    .ring:nth-child(1) {
+      border-bottom: 4px solid #00F5FF;
+      animation: rotate1 2s linear infinite;
+      box-shadow: 0 4px 10px rgba(0, 245, 255, 0.2);
+    }
+    .ring:nth-child(2) {
+      border-right: 4px solid #9D4EDD;
+      animation: rotate2 2s linear infinite;
+      box-shadow: 4px 0 10px rgba(157, 78, 221, 0.2);
+    }
+    .ring:nth-child(3) {
+      border-top: 4px solid #FFFFFF;
+      animation: rotate3 2s linear infinite;
+      box-shadow: 0 -4px 10px rgba(255, 255, 255, 0.1);
+    }
+    .loading-logo {
+      color: #00F5FF;
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px rgba(0, 245, 255, 0.6);
+      z-index: 10000;
+      animation: pulseLogo 2s infinite alternate;
+    }
+    .loading-text {
+      color: #B0B0B0;
+      margin-top: 40px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 5px;
+      animation: pulseText 1.5s ease-in-out infinite alternate;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+    }
+    @keyframes rotate1 {
+      0% { transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg); }
+      100% { transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg); }
+    }
+    @keyframes rotate2 {
+      0% { transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg); }
+      100% { transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg); }
+    }
+    @keyframes rotate3 {
+      0% { transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg); }
+      100% { transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg); }
+    }
+    @keyframes pulseLogo {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.05); opacity: 1; }
+    }
+    @keyframes pulseText {
+      0% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Preloader HTML -->
+  <div id="preloader">
+    <div class="loader-container">
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="loading-logo">A</div>
+    </div>
+    <span class="loading-text">INITIALIZING DIGITAL UNIVERSE...</span>
+  </div>
+
+  <!-- Observer Script to Fade Out Loader -->
+  <script>
+    const checkFlutterReady = setInterval(() => {
+      // Flutter creates either a canvas or a custom element like <flutter-view> when loading
+      const flutterElement = document.querySelector('flutter-view') || document.querySelector('canvas');
+      if (flutterElement) {
+        const loader = document.getElementById('preloader');
+        if (loader) {
+          loader.style.opacity = '0';
+          loader.style.pointerEvents = 'none';
+          setTimeout(() => {
+            loader.remove();
+          }, 500);
+        }
+        clearInterval(checkFlutterReady);
+      }
+    }, 100);
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
