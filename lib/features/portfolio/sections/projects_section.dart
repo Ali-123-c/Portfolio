@@ -505,6 +505,16 @@ class ProjectsSection extends ConsumerWidget {
   List<_ProjectData> _getMockProjects() {
     return [
       const _ProjectData(
+        title: 'GymFlow Management System',
+        category: 'Full-stack',
+        description: 'A comprehensive gym management system with fingerprint attendance tracking, member management, and payment processing.',
+        longDescription: 'GymFlow is a robust, full-stack gym management solution built with Next.js 15, TypeScript, and Supabase. It offers a complete suite of tools for gym administrators including member management, real-time attendance tracking via USB fingerprint integration, and payment processing. The system features a responsive dashboard providing an overview of total members, daily attendance, pending fees, and revenue.',
+        challenge: 'Integrating a local hardware device (USB fingerprint scanner) with a modern web application for seamless attendance logging.',
+        solution: 'Developed a local Python application that interfaces with the biometric scanner and communicates with the Next.js API routes, transmitting scan data to the Supabase backend in real-time.',
+        techTags: ['Next.js 15', 'TypeScript', 'Supabase', 'Tailwind CSS', 'Python', 'Biometrics'],
+        githubUrl: 'https://github.com/Ali-123-c/RockHardGym',
+      ),
+      const _ProjectData(
         title: 'Lost & Found Campus Core (FYP)',
         category: 'Full-stack',
         description: 'Flagship Final Year Project combining a Flutter mobile client with a Clean Architecture .NET 8 backend ecosystem.',
