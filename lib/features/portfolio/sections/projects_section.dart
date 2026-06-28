@@ -505,6 +505,16 @@ class ProjectsSection extends ConsumerWidget {
   List<_ProjectData> _getMockProjects() {
     return [
       const _ProjectData(
+        title: 'Smart Expense Tracker & Finance Manager',
+        category: 'Full-stack',
+        description: 'A modern expense tracker with budgeting tools, trend charts, and cloud sync — inspired by Money Manager and Spendee.',
+        longDescription: 'A full-featured personal finance application built with Flutter and Firebase. Supports income/expense tracking with categorization, monthly budget management with visual progress bars and alerts, spending trend charts, pie chart visualizations, multi-currency support, biometric login, PDF report generation and export, dark mode, and offline-first architecture using Hive with Firebase Cloud Firestore synchronization.',
+        challenge: 'Implementing reliable offline-first data synchronization between local Hive storage and Cloud Firestore without data conflicts or loss.',
+        solution: 'Designed a synchronized queue system that caches writes locally when offline and replays them to Firestore once connectivity is restored, ensuring data integrity across sessions.',
+        techTags: ['Flutter', 'Dart', 'Riverpod', 'Firebase Auth', 'Cloud Firestore', 'Hive', 'fl_chart', 'PDF Gen'],
+        githubUrl: 'https://github.com/Ali-123-c/FINANCE_APP',
+      ),
+      const _ProjectData(
         title: 'GymFlow Management System',
         category: 'Full-stack',
         description: 'A comprehensive gym management system with fingerprint attendance tracking, member management, and payment processing.',
