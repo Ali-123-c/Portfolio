@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/colors.dart';
 import '../../../core/widgets/glass_card.dart';
@@ -46,6 +47,13 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Future<void> _launchURL(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    }
   }
 
   // Scroll tracking algorithm to highlight the correct navbar button
@@ -122,7 +130,11 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
             child: Column(
               children: [
                 // Sections with keys for routing target offsets
-                HeroSection(key: _sectionKeys['home'], onExploreProjects: () => _scrollToSection('projects')),
+                HeroSection(
+                  key: _sectionKeys['home'],
+                  onExploreProjects: () => _scrollToSection('projects'),
+                  onResumePressed: () => _launchURL('/assets/documents/Resume.pdf'),
+                ),
                 AboutSection(key: _sectionKeys['about']),
                 SkillsSection(key: _sectionKeys['skills']),
                 ProjectsSection(key: _sectionKeys['projects']),
@@ -370,19 +382,14 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
+    IconButton(
                   icon: const FaIcon(FontAwesomeIcons.github, color: AppColors.textSecondary, size: 20),
-                  onPressed: () {},
+                  onPressed: () => _launchURL('https://github.com/Ali-123-c'),
                 ),
                 const SizedBox(width: 16),
                 IconButton(
                   icon: const FaIcon(FontAwesomeIcons.linkedinIn, color: AppColors.textSecondary, size: 20),
-                  onPressed: () {},
-                ),
-                const SizedBox(width: 16),
-                IconButton(
-                  icon: const FaIcon(FontAwesomeIcons.twitter, color: AppColors.textSecondary, size: 20),
-                  onPressed: () {},
+                  onPressed: () => _launchURL('https://www.linkedin.com/in/ali-haider-2172823a7'),
                 ),
               ],
             ),

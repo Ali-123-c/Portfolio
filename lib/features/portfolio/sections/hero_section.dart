@@ -8,10 +8,12 @@ import '../../../core/widgets/glow_button.dart';
 
 class HeroSection extends StatelessWidget {
   final VoidCallback onExploreProjects;
+  final VoidCallback onResumePressed;
 
   const HeroSection({
     super.key,
     required this.onExploreProjects,
+    required this.onResumePressed,
   });
 
   @override
@@ -160,9 +162,7 @@ class HeroSection extends StatelessWidget {
               text: 'Resume',
               icon: FontAwesomeIcons.download,
               isSecondary: true,
-              onPressed: () {
-                // Future implementation for file downloads or external URLs
-              },
+              onPressed: onResumePressed,
             ),
           ],
         ).animate().fadeIn(delay: 800.ms, duration: 600.ms).slideY(begin: 0.2, end: 0, curve: Curves.easeOutBack),

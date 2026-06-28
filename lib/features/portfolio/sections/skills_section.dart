@@ -47,8 +47,8 @@ class SkillsSection extends StatelessWidget {
                       [
                         const _SkillInfo('Flutter Framework', 0.95),
                         const _SkillInfo('Dart Programming', 0.95),
-                        const _SkillInfo('Reactive Programming', 0.90),
-                        const _SkillInfo('Responsive UI/UX Layouts', 0.95),
+                        const _SkillInfo('Reactive Programming', 0.88),
+                        const _SkillInfo('Responsive UI/UX Layouts', 0.92),
                       ],
                     ),
                     _buildSkillCategoryCard(
@@ -56,10 +56,10 @@ class SkillsSection extends StatelessWidget {
                       FontAwesomeIcons.server,
                       AppColors.purpleAccent,
                       [
-                        const _SkillInfo('C# / .NET Core', 0.90),
-                        const _SkillInfo('Entity Framework Core', 0.88),
-                        const _SkillInfo('REST API Architecture', 0.92),
-                        const _SkillInfo('Identity & Authorization', 0.85),
+                        const _SkillInfo('C# / .NET Core', 0.80),
+                        const _SkillInfo('Entity Framework Core', 0.75),
+                        const _SkillInfo('REST API Architecture', 0.88),
+                        const _SkillInfo('Identity & Authorization', 0.80),
                       ],
                     ),
                     _buildSkillCategoryCard(
@@ -67,10 +67,10 @@ class SkillsSection extends StatelessWidget {
                       FontAwesomeIcons.database,
                       Colors.white,
                       [
-                        const _SkillInfo('Android Native Bindings', 0.80),
-                        const _SkillInfo('SQL Server / SQLite', 0.85),
+                        const _SkillInfo('Android Native Bindings', 0.70),
+                        const _SkillInfo('SQL Server / SQLite', 0.78),
                         const _SkillInfo('State (Riverpod / Bloc)', 0.92),
-                        const _SkillInfo('Firebase Integration', 0.88),
+                        const _SkillInfo('Firebase Integration', 0.85),
                       ],
                     ),
                   ],

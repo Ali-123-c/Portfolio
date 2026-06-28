@@ -205,7 +205,7 @@ class AboutSection extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       children: [
         _buildMetricCard('1+', 'Years Experience', AppColors.cyanAccent),
-        _buildMetricCard('7+', 'Completed Apps', AppColors.purpleAccent),
+        _buildMetricCard('10+', 'Completed Apps', AppColors.purpleAccent),
         _buildMetricCard('10+', 'REST APIs Designed', Colors.white),
         _buildMetricCard('100%', 'Production Success', AppColors.cyanAccent),
       ],
