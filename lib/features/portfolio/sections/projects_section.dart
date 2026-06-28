@@ -132,7 +132,7 @@ class ProjectsSection extends ConsumerWidget {
               duration: const Duration(milliseconds: 250),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
-                color: isActive ? AppColors.cyanAccent.withOpacity(0.12) : AppColors.backgroundCard,
+                color: isActive ? AppColors.cyanAccent.withValues(alpha: 0.12) : AppColors.backgroundCard,
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
                   color: isActive ? AppColors.cyanAccent : AppColors.glassBorder,
@@ -172,8 +172,8 @@ class ProjectsSection extends ConsumerWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: project.category == 'Backend'
-                      ? [AppColors.darkPurple.withOpacity(0.6), AppColors.backgroundCard]
-                      : [AppColors.cyanAccent.withOpacity(0.08), AppColors.backgroundCard],
+                      ? [AppColors.darkPurple.withValues(alpha: 0.6), AppColors.backgroundCard]
+                      : [AppColors.cyanAccent.withValues(alpha: 0.08), AppColors.backgroundCard],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -187,13 +187,13 @@ class ProjectsSection extends ConsumerWidget {
                     Opacity(
                       opacity: 0.15,
                       child: GridPaper(
-                        color: AppColors.cyanAccent.withOpacity(0.3),
+                        color: AppColors.cyanAccent.withValues(alpha: 0.3),
                         interval: 40,
                         divisions: 1,
                         subdivisions: 1,
                       ),
                     ),
-                    Icon(
+                    FaIcon(
                       project.category == 'Backend' ? FontAwesomeIcons.terminal : FontAwesomeIcons.mobileScreen,
                       size: 44,
                       color: project.category == 'Backend' ? AppColors.purpleAccent : AppColors.cyanAccent,
@@ -312,7 +312,7 @@ class ProjectsSection extends ConsumerWidget {
   void _openProjectDetailsModal(BuildContext context, _ProjectData project) {
     showDialog(
       context: context,
-      barrierColor: AppColors.background.withOpacity(0.85),
+      barrierColor: AppColors.background.withValues(alpha: 0.85),
       builder: (context) {
         return Center(
           child: Container(
@@ -356,8 +356,8 @@ class ProjectsSection extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: project.category == 'Backend'
-                              ? AppColors.purpleAccent.withOpacity(0.12)
-                              : AppColors.cyanAccent.withOpacity(0.12),
+                              ? AppColors.purpleAccent.withValues(alpha: 0.12)
+                              : AppColors.cyanAccent.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                             color: project.category == 'Backend' ? AppColors.purpleAccent : AppColors.cyanAccent,

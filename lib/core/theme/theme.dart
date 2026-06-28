@@ -97,7 +97,7 @@ class AppTheme {
       ),
       
       scrollbarTheme: ScrollbarThemeData(
-        thumbColor: WidgetStateProperty.all(AppColors.cyanAccent.withOpacity(0.3)),
+        thumbColor: WidgetStateProperty.all(AppColors.cyanAccent.withValues(alpha: 0.3)),
         trackColor: WidgetStateProperty.all(Colors.transparent),
         radius: const Radius.circular(8),
       ),

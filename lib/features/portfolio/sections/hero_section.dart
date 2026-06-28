@@ -66,9 +66,9 @@ class HeroSection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            color: AppColors.cyanAccent.withOpacity(0.08),
+            color: AppColors.cyanAccent.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: AppColors.cyanAccent.withOpacity(0.3), width: 1),
+            border: Border.all(color: AppColors.cyanAccent.withValues(alpha: 0.3), width: 1),
           ),
           child: Text(
             'WELCOME TO MY SPACE',
@@ -106,7 +106,7 @@ class HeroSection extends StatelessWidget {
                   letterSpacing: -1,
                   shadows: [
                     Shadow(
-                      color: AppColors.cyanAccent.withOpacity(0.5),
+                      color: AppColors.cyanAccent.withValues(alpha: 0.5),
                       blurRadius: 20,
                     ),
                   ],
@@ -250,7 +250,7 @@ class _Interactive3DAvatarCanvasState extends State<_Interactive3DAvatarCanvas> 
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: AppColors.cyanAccent.withOpacity(_isHovered ? 0.22 : 0.08),
+                      color: AppColors.cyanAccent.withValues(alpha: _isHovered ? 0.22 : 0.08),
                       width: 1.5,
                     ),
                   ),
@@ -263,7 +263,7 @@ class _Interactive3DAvatarCanvasState extends State<_Interactive3DAvatarCanvas> 
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: AppColors.purpleAccent.withOpacity(_isHovered ? 0.16 : 0.06),
+                      color: AppColors.purpleAccent.withValues(alpha: _isHovered ? 0.16 : 0.06),
                       width: 1,
                     ),
                   ),
@@ -278,12 +278,12 @@ class _Interactive3DAvatarCanvasState extends State<_Interactive3DAvatarCanvas> 
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.cyanAccent.withOpacity(_isHovered ? 0.26 : 0.08),
+                        color: AppColors.cyanAccent.withValues(alpha: _isHovered ? 0.26 : 0.08),
                         blurRadius: _isHovered ? 40 : 25,
                         spreadRadius: 2,
                       ),
                       BoxShadow(
-                        color: AppColors.purpleAccent.withOpacity(_isHovered ? 0.18 : 0.04),
+                        color: AppColors.purpleAccent.withValues(alpha: _isHovered ? 0.18 : 0.04),
                         blurRadius: _isHovered ? 30 : 15,
                         spreadRadius: -2,
                       ),
@@ -300,7 +300,7 @@ class _Interactive3DAvatarCanvasState extends State<_Interactive3DAvatarCanvas> 
                     border: Border.all(color: AppColors.cyanAccent, width: 2.5),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.cyanAccent.withOpacity(0.15),
+                        color: AppColors.cyanAccent.withValues(alpha: 0.15),
                         blurRadius: 15,
                         spreadRadius: 1,
                       ),

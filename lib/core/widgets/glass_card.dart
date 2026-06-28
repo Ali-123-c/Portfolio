@@ -47,13 +47,13 @@ class _GlassCardState extends State<GlassCard> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           curve: Curves.easeOutCubic,
-          transform: Matrix4.identity()..scale(scale),
+          transform: Matrix4.diagonal3Values(scale, scale, 1.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(widget.borderRadius),
             boxShadow: [
               BoxShadow(
                 color: _isHovered 
-                    ? effectiveGlowColor.withOpacity(0.12)
+                    ? effectiveGlowColor.withValues(alpha: 0.12)
                     : Colors.transparent,
                 blurRadius: 24,
                 spreadRadius: -4,
@@ -70,12 +70,12 @@ class _GlassCardState extends State<GlassCard> {
                 padding: widget.padding,
                 decoration: BoxDecoration(
                   color: _isHovered
-                      ? AppColors.glassBackground.withOpacity(0.08)
+                      ? AppColors.glassBackground.withValues(alpha: 0.08)
                       : AppColors.glassBackground,
                   borderRadius: BorderRadius.circular(widget.borderRadius),
                   border: Border.all(
                     color: _isHovered
-                        ? effectiveGlowColor.withOpacity(0.4)
+                        ? effectiveGlowColor.withValues(alpha: 0.4)
                         : widget.borderColor,
                     width: _isHovered ? 1.2 : 1.0,
                   ),

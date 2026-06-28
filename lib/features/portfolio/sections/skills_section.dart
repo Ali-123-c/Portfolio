@@ -125,7 +125,7 @@ class SkillsSection extends StatelessWidget {
   // Core skill capsule container
   Widget _buildSkillCategoryCard(
     String categoryTitle,
-    IconData icon,
+    FaIconData icon,
     Color glowColor,
     List<_SkillInfo> skills,
   ) {
@@ -137,7 +137,7 @@ class SkillsSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, color: glowColor, size: 24),
+              FaIcon(icon, color: glowColor, size: 24),
               const SizedBox(width: 12),
               Text(
                 categoryTitle,
@@ -219,12 +219,12 @@ class SkillsSection extends StatelessWidget {
                     gradient: LinearGradient(
                       colors: [
                         glowColor,
-                        glowColor.withOpacity(0.6),
+                        glowColor.withValues(alpha: 0.6),
                       ],
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: glowColor.withOpacity(0.4),
+                        color: glowColor.withValues(alpha: 0.4),
                         blurRadius: 8,
                         spreadRadius: 0.5,
                       ),

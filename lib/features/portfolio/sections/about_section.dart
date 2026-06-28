@@ -109,7 +109,7 @@ class AboutSection extends StatelessWidget {
                 border: Border.all(color: AppColors.cyanAccent, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.cyanAccent.withOpacity(0.2),
+                    color: AppColors.cyanAccent.withValues(alpha: 0.2),
                     blurRadius: 12,
                     spreadRadius: 1,
                   ),
@@ -228,7 +228,7 @@ class AboutSection extends StatelessWidget {
               color: highlightColor,
               shadows: [
                 Shadow(
-                  color: highlightColor.withOpacity(0.3),
+                  color: highlightColor.withValues(alpha: 0.3),
                   blurRadius: 10,
                 ),
               ],

@@ -155,7 +155,7 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
         child: Opacity(
           opacity: 0.15,
           child: GridPaper(
-            color: AppColors.cyanAccent.withOpacity(0.2),
+            color: AppColors.cyanAccent.withValues(alpha: 0.2),
             divisions: 1,
             subdivisions: 1,
             interval: 120,
@@ -248,9 +248,9 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: isActive ? AppColors.cyanAccent.withOpacity(0.12) : Colors.transparent,
+            color: isActive ? AppColors.cyanAccent.withValues(alpha: 0.12) : Colors.transparent,
             border: Border.all(
-              color: isActive ? AppColors.cyanAccent.withOpacity(0.3) : Colors.transparent,
+              color: isActive ? AppColors.cyanAccent.withValues(alpha: 0.3) : Colors.transparent,
               width: 1,
             ),
           ),
@@ -271,7 +271,7 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
   // Translucent Slide-out Drawer for Tablets/Phones
   Widget _buildMobileDrawer(String activeSection) {
     return Drawer(
-      backgroundColor: AppColors.background.withOpacity(0.95),
+      backgroundColor: AppColors.background.withValues(alpha: 0.95),
       child: Container(
         decoration: const BoxDecoration(
           border: Border(right: BorderSide(color: AppColors.glassBorder, width: 1)),
@@ -336,7 +336,7 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        tileColor: isActive ? AppColors.cyanAccent.withOpacity(0.08) : Colors.transparent,
+        tileColor: isActive ? AppColors.cyanAccent.withValues(alpha: 0.08) : Colors.transparent,
         title: Text(
           text,
           style: GoogleFonts.spaceGrotesk(
@@ -371,17 +371,17 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: const Icon(FontAwesomeIcons.github, color: AppColors.textSecondary, size: 20),
+                  icon: const FaIcon(FontAwesomeIcons.github, color: AppColors.textSecondary, size: 20),
                   onPressed: () {},
                 ),
                 const SizedBox(width: 16),
                 IconButton(
-                  icon: const Icon(FontAwesomeIcons.linkedinIn, color: AppColors.textSecondary, size: 20),
+                  icon: const FaIcon(FontAwesomeIcons.linkedinIn, color: AppColors.textSecondary, size: 20),
                   onPressed: () {},
                 ),
                 const SizedBox(width: 16),
                 IconButton(
-                  icon: const Icon(FontAwesomeIcons.twitter, color: AppColors.textSecondary, size: 20),
+                  icon: const FaIcon(FontAwesomeIcons.twitter, color: AppColors.textSecondary, size: 20),
                   onPressed: () {},
                 ),
               ],
@@ -400,7 +400,7 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
               'Designed & Engineered with Futuristic Flutter Web',
               style: GoogleFonts.spaceGrotesk(
                 fontSize: 10,
-                color: AppColors.cyanAccent.withOpacity(0.6),
+                color: AppColors.cyanAccent.withValues(alpha: 0.6),
                 letterSpacing: 2,
               ),
             ),

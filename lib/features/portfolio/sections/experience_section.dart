@@ -91,8 +91,8 @@ class ExperienceSection extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppColors.cyanAccent.withOpacity(0.4),
-                  AppColors.purpleAccent.withOpacity(0.4),
+                  AppColors.cyanAccent.withValues(alpha: 0.4),
+                  AppColors.purpleAccent.withValues(alpha: 0.4),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -150,7 +150,7 @@ class ExperienceSection extends StatelessWidget {
           left: 12,
           child: Container(
             width: 2,
-            color: AppColors.cyanAccent.withOpacity(0.3),
+            color: AppColors.cyanAccent.withValues(alpha: 0.3),
           ),
         ),
         
@@ -282,7 +282,7 @@ class ExperienceSection extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: isLeft ? AppColors.cyanAccent.withOpacity(0.3) : AppColors.purpleAccent.withOpacity(0.3),
+            color: isLeft ? AppColors.cyanAccent.withValues(alpha: 0.3) : AppColors.purpleAccent.withValues(alpha: 0.3),
             blurRadius: 10,
             spreadRadius: 2,
           ),

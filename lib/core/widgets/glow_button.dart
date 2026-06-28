@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/colors.dart';
 
 class GlowButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
-  final IconData? icon;
+  final FaIconData? icon;
   final Color color;
   final bool isSecondary;
   final double height;
@@ -42,25 +43,25 @@ class _GlowButtonState extends State<GlowButton> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOutCubic,
-          transform: Matrix4.identity()..scale(scale),
+          transform: Matrix4.diagonal3Values(scale, scale, 1.0),
           height: widget.height,
           padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: widget.isSecondary
                 ? Colors.transparent
-                : (_isHovered ? widget.color.withOpacity(0.95) : widget.color.withOpacity(0.8)),
+                : (_isHovered ? widget.color.withValues(alpha: 0.95) : widget.color.withValues(alpha: 0.8)),
             border: Border.all(
               color: widget.isSecondary
-                  ? (_isHovered ? widget.color : widget.color.withOpacity(0.5))
+                  ? (_isHovered ? widget.color : widget.color.withValues(alpha: 0.5))
                   : Colors.transparent,
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
                 color: _isHovered 
-                    ? widget.color.withOpacity(0.35) 
-                    : widget.color.withOpacity(0.12),
+                    ? widget.color.withValues(alpha: 0.35) 
+                    : widget.color.withValues(alpha: 0.12),
                 blurRadius: _isHovered ? 20 : 10,
                 spreadRadius: _isHovered ? 1 : -1,
                 offset: const Offset(0, 4),
@@ -73,7 +74,7 @@ class _GlowButtonState extends State<GlowButton> {
 
             children: [
               if (widget.icon != null) ...[
-                Icon(
+                FaIcon(
                   widget.icon,
                   size: 16,
                   color: widget.isSecondary ? widget.color : Colors.black,

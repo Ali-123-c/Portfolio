@@ -165,7 +165,7 @@ class _ContactSectionState extends ConsumerState<ContactSection> {
                 width: 72,
                 height: 72,
                 decoration: BoxDecoration(
-                  color: AppColors.cyanAccent.withOpacity(0.08),
+                  color: AppColors.cyanAccent.withValues(alpha: 0.08),
                   shape: BoxShape.circle,
                   border: Border.all(color: AppColors.cyanAccent, width: 2),
                 ),
@@ -238,10 +238,12 @@ class _ContactSectionState extends ConsumerState<ContactSection> {
                 prefixIcon: Icon(Icons.person_outline, size: 18),
               ),
               validator: (val) {
-                if (val == null || val.trim().isEmpty)
+                if (val == null || val.trim().isEmpty) {
                   return 'Name is required.';
-                if (val.trim().length < 3)
+                }
+                if (val.trim().length < 3) {
                   return 'Must be at least 3 characters.';
+                }
                 return null;
               },
             ),
@@ -259,10 +261,12 @@ class _ContactSectionState extends ConsumerState<ContactSection> {
                 prefixIcon: Icon(Icons.mail_outline, size: 18),
               ),
               validator: (val) {
-                if (val == null || val.trim().isEmpty)
+                if (val == null || val.trim().isEmpty) {
                   return 'Email is required.';
-                if (!_isValidEmail(val.trim()))
+                }
+                if (!_isValidEmail(val.trim())) {
                   return 'Please enter a valid email.';
+                }
                 return null;
               },
             ),
@@ -283,10 +287,12 @@ class _ContactSectionState extends ConsumerState<ContactSection> {
                 ),
               ),
               validator: (val) {
-                if (val == null || val.trim().isEmpty)
+                if (val == null || val.trim().isEmpty) {
                   return 'Message is required.';
-                if (val.trim().length < 10)
+                }
+                if (val.trim().length < 10) {
                   return 'Must be at least 10 characters.';
+                }
                 return null;
               },
             ),
