@@ -515,6 +515,16 @@ class ProjectsSection extends ConsumerWidget {
         githubUrl: 'https://github.com/Ali-123-c/FINANCE_APP',
       ),
       const _ProjectData(
+        title: 'FieldOps Service Management',
+        category: 'Full-stack',
+        description: 'A cross-platform field service management app for assigning, tracking, and completing service requests with role-based access.',
+        longDescription: 'A comprehensive field service management solution built with Flutter and Supabase. Features a dual-role system with distinct Manager and Technician interfaces. Managers can create service requests, assign/reassign jobs to technicians, and oversee the entire team. Technicians can accept or reject jobs, update status through a strict workflow (Pending → Accepted → In Progress → Completed), and submit detailed service reports. Includes real-time notifications via FCM and Supabase Realtime subscriptions, offline-first caching with Hive, and PostgreSQL Row Level Security for data isolation between roles.',
+        challenge: 'Implementing real-time job status synchronization between managers and technicians with offline support while enforcing strict role-based data privacy.',
+        solution: 'Leveraged Supabase Realtime subscriptions for live job updates, Hive local caching for seamless offline resilience, and PostgreSQL RLS policies to isolate data access per role, ensuring each technician only sees their assigned jobs.',
+        techTags: ['Flutter', 'Dart', 'Supabase', 'Riverpod', 'GoRouter', 'FCM', 'Hive', 'PostgreSQL'],
+        githubUrl: 'https://github.com/Ali-123-c/-fieldops-app',
+      ),
+      const _ProjectData(
         title: 'GymFlow Management System',
         category: 'Full-stack',
         description: 'A comprehensive gym management system with fingerprint attendance tracking, member management, and payment processing.',
