@@ -1,3 +1,6 @@
+// ignore_for_file: deprecated_member_use, avoid_web_libraries_in_flutter
+
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -107,11 +110,13 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
     }
   }
 
-  void _downloadCV() async {
-    final Uri url = Uri.parse('assets/documents/Ali Haider.pdf');
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    }
+  void _downloadCV() {
+    final anchor = html.AnchorElement(
+      href: 'assets/documents/Ali Haider.pdf',
+    )
+      ..target = '_blank'
+      ..download = 'Ali_Haider_Qadri_CV.pdf';
+    anchor.click();
   }
 
   @override

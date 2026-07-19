@@ -15,7 +15,6 @@ import 'hero_section.dart'; // For MaxWidthContainer
 class ProjectsSection extends ConsumerWidget {
   const ProjectsSection({super.key});
 
-  // URL Launch Helper
   Future<void> _launchURL(String urlString) async {
     final Uri url = Uri.parse(urlString);
     if (await canLaunchUrl(url)) {
@@ -27,7 +26,7 @@ class ProjectsSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
     final isDesktop = size.width >= 900;
-    
+
     final selectedFilter = ref.watch(projectFilterProvider);
     final projects = _getProjects().where((project) {
       if (selectedFilter == 'All') return true;
@@ -43,15 +42,10 @@ class ProjectsSection extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Section Header
             _buildSectionHeader(),
             const SizedBox(height: 40),
-
-            // Filter Chips Row
             _buildFilterChips(context, ref, selectedFilter),
             const SizedBox(height: 48),
-
-            // Project Cards Grid
             RevealAnimation(
               delayMilliseconds: 200,
               child: projects.isEmpty
@@ -78,13 +72,12 @@ class ProjectsSection extends ConsumerWidget {
     );
   }
 
-  // Section Header
   Widget _buildSectionHeader() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '// INTERNSHIP CREDENTIALS',
+          '// FEATURED PROJECTS',
           style: GoogleFonts.spaceGrotesk(
             fontSize: 14,
             fontWeight: FontWeight.bold,
@@ -94,7 +87,7 @@ class ProjectsSection extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Selected Work & Projects',
+          'Real-World Applications',
           style: GoogleFonts.spaceGrotesk(
             fontSize: 28,
             fontWeight: FontWeight.w800,
@@ -117,10 +110,9 @@ class ProjectsSection extends ConsumerWidget {
     ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.1, end: 0);
   }
 
-  // Category Filter Chips Navigation Row
   Widget _buildFilterChips(BuildContext context, WidgetRef ref, String activeFilter) {
     final categories = ['All', 'Android', 'Backend', 'Full-stack'];
-    
+
     return Wrap(
       spacing: 12,
       runSpacing: 12,
@@ -159,55 +151,82 @@ class ProjectsSection extends ConsumerWidget {
     ).animate().fadeIn(delay: 200.ms, duration: 600.ms);
   }
 
-  // Individual Project card component
   Widget _buildProjectCard(BuildContext context, _ProjectData project) {
     return GlassCard(
       padding: EdgeInsets.zero,
-      glowColor: project.category == 'Backend' ? AppColors.purpleAccent : AppColors.cyanAccent,
+      glowColor: project.glowColor,
       onTap: () => _openProjectDetailsModal(context, project),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Graphic Banner Placeholder (Futuristic layout)
+          // Project Image / Banner
           Expanded(
             flex: 4,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: project.category == 'Backend'
-                      ? [AppColors.darkPurple.withValues(alpha: 0.6), AppColors.backgroundCard]
-                      : [AppColors.cyanAccent.withValues(alpha: 0.08), AppColors.backgroundCard],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                // Background gradient with grid pattern
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        project.glowColor.withValues(alpha: 0.15),
+                        AppColors.backgroundCard,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    border: const Border(
+                      bottom: BorderSide(color: AppColors.glassBorder, width: 0.5),
+                    ),
+                  ),
+                  child: Opacity(
+                    opacity: 0.1,
+                    child: GridPaper(
+                      color: project.glowColor.withValues(alpha: 0.3),
+                      interval: 40,
+                      divisions: 1,
+                      subdivisions: 1,
+                    ),
+                  ),
                 ),
-                border: const Border(bottom: BorderSide(color: AppColors.glassBorder, width: 0.5)),
-              ),
-              child: RepaintBoundary(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Abstract geometric lines
-                    Opacity(
-                      opacity: 0.15,
-                      child: GridPaper(
-                        color: AppColors.cyanAccent.withValues(alpha: 0.3),
-                        interval: 40,
-                        divisions: 1,
-                        subdivisions: 1,
+                // Real screenshot image OR icon fallback
+                if (project.imagePath != null)
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                    child: Image.asset(
+                      project.imagePath!,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                      errorBuilder: (context, error, stackTrace) => _buildIconFallback(project),
+                    ),
+                  )
+                else
+                  _buildIconFallback(project),
+                // Gradient overlay at bottom for text contrast
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: 40,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          AppColors.backgroundCard.withValues(alpha: 0.6),
+                        ],
                       ),
                     ),
-                    FaIcon(
-                      project.category == 'Backend' ? FontAwesomeIcons.terminal : FontAwesomeIcons.mobileScreen,
-                      size: 44,
-                      color: project.category == 'Backend' ? AppColors.purpleAccent : AppColors.cyanAccent,
-                    ).animate(onPlay: (controller) => controller.repeat()).shimmer(duration: 3.seconds, color: Colors.white24),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-          
+
           // Details content
           Expanded(
             flex: 5,
@@ -223,13 +242,24 @@ class ProjectsSection extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            project.category.toUpperCase(),
-                            style: GoogleFonts.spaceGrotesk(
-                              fontSize: 9,
-                              fontWeight: FontWeight.bold,
-                              color: project.category == 'Backend' ? AppColors.purpleAccent : AppColors.cyanAccent,
-                              letterSpacing: 2,
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: project.glowColor.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(
+                                color: project.glowColor.withValues(alpha: 0.3),
+                                width: 0.5,
+                              ),
+                            ),
+                            child: Text(
+                              project.category.toUpperCase(),
+                              style: GoogleFonts.spaceGrotesk(
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                                color: project.glowColor,
+                                letterSpacing: 1.5,
+                              ),
                             ),
                           ),
                           Icon(
@@ -243,7 +273,7 @@ class ProjectsSection extends ConsumerWidget {
                       Text(
                         project.title,
                         style: GoogleFonts.spaceGrotesk(
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -254,30 +284,30 @@ class ProjectsSection extends ConsumerWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
-                          fontSize: 12,
+                          fontSize: 11,
                           color: AppColors.textSecondary,
                           height: 1.4,
                         ),
                       ),
                     ],
                   ),
-                  
-                  // Tech stacks tags list
+                  const SizedBox(height: 8),
+                  // Tech tags
                   Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
+                    spacing: 4,
+                    runSpacing: 4,
                     children: project.techTags.take(3).map((tag) {
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                         decoration: BoxDecoration(
                           color: AppColors.background,
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(4),
                           border: Border.all(color: AppColors.glassBorder, width: 0.5),
                         ),
                         child: Text(
                           tag,
                           style: GoogleFonts.inter(
-                            fontSize: 9,
+                            fontSize: 8,
                             fontWeight: FontWeight.w600,
                             color: AppColors.textSecondary,
                           ),
@@ -294,6 +324,17 @@ class ProjectsSection extends ConsumerWidget {
     );
   }
 
+  Widget _buildIconFallback(_ProjectData project) {
+    return Center(
+      child: FaIcon(
+        project.icon,
+        size: 40,
+        color: project.glowColor.withValues(alpha: 0.7),
+      ).animate(onPlay: (controller) => controller.repeat())
+        .shimmer(duration: 3.seconds, color: Colors.white12),
+    );
+  }
+
   Widget _buildEmptyState() {
     return Center(
       child: Column(
@@ -301,7 +342,7 @@ class ProjectsSection extends ConsumerWidget {
           const Icon(Icons.code_off, color: AppColors.textMuted, size: 48),
           const SizedBox(height: 16),
           Text(
-            'No matching internship projects found.',
+            'No matching projects found.',
             style: GoogleFonts.spaceGrotesk(
               color: AppColors.textSecondary,
               fontSize: 14,
@@ -312,7 +353,6 @@ class ProjectsSection extends ConsumerWidget {
     );
   }
 
-  // Multi-Screenshot, challenge & solution details modal overlay
   void _openProjectDetailsModal(BuildContext context, _ProjectData project) {
     showDialog(
       context: context,
@@ -327,7 +367,7 @@ class ProjectsSection extends ConsumerWidget {
               padding: EdgeInsets.zero,
               borderRadius: 24,
               borderColor: AppColors.glassBorder,
-              glowColor: project.category == 'Backend' ? AppColors.purpleAccent : AppColors.cyanAccent,
+              glowColor: project.glowColor,
               child: Scaffold(
                 backgroundColor: Colors.transparent,
                 appBar: AppBar(
@@ -355,16 +395,14 @@ class ProjectsSection extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Subtitle Category Pill
+                      // Category badge
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: project.category == 'Backend'
-                              ? AppColors.purpleAccent.withValues(alpha: 0.12)
-                              : AppColors.cyanAccent.withValues(alpha: 0.12),
+                          color: project.glowColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: project.category == 'Backend' ? AppColors.purpleAccent : AppColors.cyanAccent,
+                            color: project.glowColor,
                             width: 0.8,
                           ),
                         ),
@@ -373,14 +411,12 @@ class ProjectsSection extends ConsumerWidget {
                           style: GoogleFonts.spaceGrotesk(
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
-                            color: project.category == 'Backend' ? AppColors.purpleAccent : AppColors.cyanAccent,
+                            color: project.glowColor,
                             letterSpacing: 1.5,
                           ),
                         ),
                       ),
                       const SizedBox(height: 24),
-                      
-                      // Full detailed description
                       Text(
                         project.longDescription,
                         style: GoogleFonts.inter(
@@ -390,8 +426,6 @@ class ProjectsSection extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 32),
-                      
-                      // Challenge & Solution Panel (Custom UI)
                       _buildBlockQuote(
                         'THE TECHNICAL CHALLENGE',
                         project.challenge,
@@ -404,8 +438,6 @@ class ProjectsSection extends ConsumerWidget {
                         AppColors.cyanAccent,
                       ),
                       const SizedBox(height: 32),
-                      
-                      // Tech Stack List
                       Text(
                         'Wired Technologies',
                         style: GoogleFonts.spaceGrotesk(
@@ -438,8 +470,6 @@ class ProjectsSection extends ConsumerWidget {
                         }).toList(),
                       ),
                       const SizedBox(height: 40),
-                      
-                      // Action buttons: main repo, specific code branch
                       Row(
                         children: [
                           GlowButton(
@@ -467,7 +497,6 @@ class ProjectsSection extends ConsumerWidget {
     );
   }
 
-  // Block Quote helper container
   Widget _buildBlockQuote(String title, String body, Color borderGlowColor) {
     return Container(
       width: double.infinity,
@@ -505,44 +534,60 @@ class ProjectsSection extends ConsumerWidget {
     );
   }
 
-  // Real projects based on actual internship and development experience
   List<_ProjectData> _getProjects() {
     return [
-      const _ProjectData(
-        title: 'AGI Field Operations Portal',
+      _ProjectData(
+        title: 'Smart Expense Tracker & Finance Manager',
         category: 'Full-stack',
-        description: 'Cross-platform mobile application built with Flutter and .NET Core backend for field operations management and data collection.',
-        longDescription: 'Developed during the AGI internship as a cross-platform mobile solution that streamlines field operations. The Flutter frontend communicates with a .NET Core Web API backend for seamless data management and database operations. Features include real-time data synchronization, offline-capable forms for field data collection, role-based access control, and an admin dashboard for monitoring field activity. Built following clean architecture principles with a focus on performance optimization and code maintainability.',
-        challenge: 'Ensuring reliable data synchronization between mobile clients and the .NET Core backend under inconsistent network conditions while maintaining data integrity across concurrent field operations.',
-        solution: 'Implemented a robust retry-and-queue mechanism on the Flutter client that caches form submissions locally when offline and replays them to the .NET Core API once connectivity is restored, with SQL Server transaction guards preventing duplicate entries.',
-        techTags: ['Flutter', 'Dart', '.NET Core', 'C#', 'REST API', 'SQL Server', 'EF Core'],
-        githubUrl: 'https://github.com/Ali-123-c',
+        description: 'Modern personal finance app with income/expense tracking, budget management, trend charts, PDF reports, and offline-first architecture.',
+        longDescription: 'A modern, full-featured personal finance application built with Flutter and Firebase. Designed to help users manage their finances with intuitive budgeting tools, trend charts, and cloud synchronization. Features include income/expense tracking with categorization, monthly budget management with visual progress bars and alerts, spending trend and pie chart visualizations, multi-currency support, biometric login for security, PDF report generation and export, dark mode support, and offline-first architecture using Hive with Cloud Firestore sync.',
+        challenge: 'Implementing reliable offline-first data synchronization between local Hive storage and Cloud Firestore without data conflicts or loss.',
+        solution: 'Designed a synchronized queue system that caches writes locally when offline and replays them to Firestore once connectivity is restored, ensuring data integrity across sessions.',
+        techTags: ['Flutter', 'Dart', 'Riverpod', 'Firebase', 'Cloud Firestore', 'Hive', 'fl_chart'],
+        githubUrl: 'https://github.com/Ali-123-c/FINANCE_APP',
+        icon: FontAwesomeIcons.wallet,
+        glowColor: const Color(0xFF00E676), // Green for finance
       ),
-      const _ProjectData(
-        title: 'TaskFlow Manager with FCM',
+      _ProjectData(
+        title: 'Smart Blood & Emergency Donor Network',
         category: 'Full-stack',
-        description: 'Production-ready task management application refactored with Provider architecture and Firebase Cloud Messaging real-time notifications.',
-        longDescription: 'A flagship internship project that refactored an existing Flutter codebase by implementing Provider state management architecture, reducing widget rebuild time by 25% and significantly improving app performance and maintainability. Integrated Firebase Cloud Messaging (FCM) for real-time push notifications, boosting user engagement by 20% and improving retention rates. Features include task scheduling, real-time status updates, Firestore cloud persistence, and offline state synchronization with background sync workers.',
-        challenge: 'Refactoring a monolithic Flutter codebase into a clean Provider-driven architecture without breaking existing functionality while simultaneously integrating Firebase Cloud Messaging for background push notifications.',
-        solution: 'Strategically decomposed the codebase into Provider-driven modules with dedicated ChangeNotifier classes, configured WorkManager hooks to handle FCM payloads on background threads, and used Firestore listeners to sync state across sessions.',
-        techTags: ['Flutter', 'Dart', 'Provider', 'Firebase FCM', 'Cloud Firestore', 'WorkManager'],
-        githubUrl: 'https://github.com/Ali-123-c',
+        description: 'Flutter + Supabase mobile app connecting blood donors, patients, and hospitals with GPS discovery and real-time emergency alerts.',
+        longDescription: 'A comprehensive Flutter-based mobile application connecting blood donors, patients, hospitals, and blood banks in real-time. Features include user authentication with email verification, role-based dashboards (Donor, Patient, Hospital, Admin), blood request system with priority levels, FCM-based push notifications, GPS-based nearby donor discovery within a radius, hospital and blood bank directory with maps and contact details, paginated donation history with achievements and levels, comprehensive admin panel for user management and approvals, Hive-powered offline caching for 6 data tables, smooth hero transitions, multi-language support (English, Hindi, Urdu), and dark mode. Built with 30+ routes following a feature-first architecture.',
+        challenge: 'Building a real-time emergency notification system that can instantly alert nearby donors when a blood request is created, while maintaining reliable offline support.',
+        solution: 'Leveraged Supabase Realtime subscriptions for instant push of blood requests to matching donors, Firebase Cloud Messaging for background notifications when the app is closed, and Hive local caching with a sync queue to ensure the app works seamlessly offline.',
+        techTags: ['Flutter', 'Dart', 'Supabase', 'PostgreSQL', 'Riverpod', 'GoRouter', 'FCM', 'Hive', 'FlutterMap'],
+        githubUrl: 'https://github.com/QADRI1212/BLOOD_DONATION',
+        icon: FontAwesomeIcons.droplet,
+        glowColor: const Color(0xFFE53935), // Red for blood
       ),
-      const _ProjectData(
-        title: 'ShopCore REST API Backend',
-        category: 'Backend',
-        description: 'Scalable .NET Core Web API with ASP.NET MVC architecture, Entity Framework Core, and SQL Server for e-commerce operations.',
-        longDescription: 'A robust backend API built with .NET Core and ASP.NET MVC following clean architecture and repository patterns. Features include complete CRUD operations for products, categories, orders, and users; JWT-based authentication with role-based authorization; middleware pipeline for request logging and error handling; Entity Framework Core with SQL Server for data persistence; and comprehensive input validation and API versioning. Designed with scalability in mind, the API supports pagination, filtering, and sorting for all list endpoints.',
-        challenge: 'Designing a clean, maintainable backend architecture that separates concerns across layers while enforcing strict validation rules and providing comprehensive API documentation.',
-        solution: 'Applied Repository Pattern with Unit of Work on top of Entity Framework Core, structured the solution into distinct layers (Controller, Service, Repository, Domain), and implemented FluentValidation rules with custom middleware for consistent error responses.',
-        techTags: ['C#', '.NET Core', 'ASP.NET MVC', 'EF Core', 'SQL Server', 'JWT Auth', 'REST API'],
-        githubUrl: 'https://github.com/Ali-123-c',
+      _ProjectData(
+        title: 'FieldOps Service Management',
+        category: 'Full-stack',
+        description: 'Cross-platform field service management with dual-role system, real-time notifications, and PostgreSQL Row Level Security.',
+        longDescription: 'A comprehensive cross-platform field service management solution for assigning, tracking, and completing service requests with role-based access. Features include a dual-role system (Manager & Technician interfaces), create/assign/reassign service requests, strict workflow state machine (Pending to Completed), real-time notifications via FCM and Supabase Realtime, detailed service report submission, offline-first caching with Hive, and PostgreSQL Row Level Security for data isolation.',
+        challenge: 'Implementing real-time job status synchronization between managers and technicians with offline support while enforcing strict role-based data privacy.',
+        solution: 'Leveraged Supabase Realtime subscriptions for live job updates, Hive local caching for seamless offline resilience, and PostgreSQL RLS policies to isolate data access per role, ensuring each technician only sees their assigned jobs.',
+        techTags: ['Flutter', 'Dart', 'Supabase', 'Riverpod', 'GoRouter', 'FCM', 'Hive', 'PostgreSQL'],
+        githubUrl: 'https://github.com/Ali-123-c/-fieldops-app',
+        icon: FontAwesomeIcons.wrench,
+        glowColor: const Color(0xFF2196F3), // Blue for service
+      ),
+      _ProjectData(
+        title: 'Lost & Found Campus Core (FYP)',
+        category: 'Full-stack',
+        description: 'Final Year Project — lost object tracking system with algorithmic matching, .NET 8 backend, and real-time notifications.',
+        longDescription: 'A landmark Final Year Project (FYP) engineered to streamline lost object logging, automated algorithmic item matching, and unclaimed assets liquidation. Combines a responsive Flutter mobile client with a Clean Architecture .NET 8 Web API backend. Features include a Flutter mobile client for students and administrators, Clean Architecture .NET 8 Web API backend, SQL Server database with EF Core, automated algorithmic matching of lost & found items, real-time notifications for matches, and admin approval workflow for claim matches.',
+        challenge: 'Restricting concurrent modifications and preventing dirty-reads/overwrites (e.g., multiple admins approving claim matches simultaneously) while ensuring instantaneous matching notifications.',
+        solution: 'Implemented RowVersion concurrency token locking inside EF Core transactional pipelines, coupled with native provider states on the Flutter mobile client to guarantee strict lifecycle thread synchronization.',
+        techTags: ['Flutter', 'Dart', '.NET 8', 'EF Core', 'SQL Server', 'C#', 'REST API'],
+        githubUrl: 'https://github.com/Ali-123-c/LOST-AND-FOUND-APP-UNI-PROJECT',
+        icon: FontAwesomeIcons.magnifyingGlass,
+        glowColor: AppColors.purpleAccent,
       ),
     ];
   }
 }
 
-// Data holder model for featured projects
 class _ProjectData {
   final String title;
   final String category;
@@ -552,6 +597,10 @@ class _ProjectData {
   final String solution;
   final List<String> techTags;
   final String githubUrl;
+  final FaIconData icon;
+  final Color glowColor;
+  final String? imagePath;
+
   const _ProjectData({
     required this.title,
     required this.category,
@@ -561,5 +610,8 @@ class _ProjectData {
     required this.solution,
     required this.techTags,
     required this.githubUrl,
+    this.icon = FontAwesomeIcons.mobileScreen,
+    this.glowColor = AppColors.cyanAccent,
+    this.imagePath,
   });
 }
