@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/widgets/glass_card.dart';
 import '../../../core/widgets/glow_button.dart';
+import '../../../core/widgets/reveal_animation.dart';
 import '../providers/portfolio_providers.dart';
 import 'hero_section.dart'; // For MaxWidthContainer
 
@@ -28,7 +29,7 @@ class ProjectsSection extends ConsumerWidget {
     final isDesktop = size.width >= 900;
     
     final selectedFilter = ref.watch(projectFilterProvider);
-    final projects = _getMockProjects().where((project) {
+    final projects = _getProjects().where((project) {
       if (selectedFilter == 'All') return true;
       return project.category == selectedFilter;
     }).toList();
@@ -51,23 +52,26 @@ class ProjectsSection extends ConsumerWidget {
             const SizedBox(height: 48),
 
             // Project Cards Grid
-            projects.isEmpty
-                ? _buildEmptyState()
-                : GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: projects.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: isDesktop ? 3 : (size.width > 600 ? 2 : 1),
-                      crossAxisSpacing: 24,
-                      mainAxisSpacing: 24,
-                      childAspectRatio: 0.85,
+            RevealAnimation(
+              delayMilliseconds: 200,
+              child: projects.isEmpty
+                  ? _buildEmptyState()
+                  : GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: projects.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: isDesktop ? 3 : (size.width > 600 ? 2 : 1),
+                        crossAxisSpacing: 24,
+                        mainAxisSpacing: 24,
+                        childAspectRatio: 0.85,
+                      ),
+                      itemBuilder: (context, index) {
+                        final project = projects[index];
+                        return _buildProjectCard(context, project);
+                      },
                     ),
-                    itemBuilder: (context, index) {
-                      final project = projects[index];
-                      return _buildProjectCard(context, project);
-                    },
-                  ),
+            ),
           ],
         ),
       ),
@@ -445,10 +449,10 @@ class ProjectsSection extends ConsumerWidget {
                           ),
                           const SizedBox(width: 16),
                           GlowButton(
-                            text: project.secondaryText ?? 'Explore Code',
+                            text: 'Explore Code',
                             icon: FontAwesomeIcons.codeBranch,
                             isSecondary: true,
-                            onPressed: () => _launchURL(project.secondaryUrl ?? project.githubUrl),
+                            onPressed: () => _launchURL(project.githubUrl),
                           ),
                         ],
                       ),
@@ -501,110 +505,38 @@ class ProjectsSection extends ConsumerWidget {
     );
   }
 
-  // Data generator mapping internship and university creations from the repository
-  List<_ProjectData> _getMockProjects() {
+  // Real projects based on actual internship and development experience
+  List<_ProjectData> _getProjects() {
     return [
       const _ProjectData(
-        title: 'Smart Expense Tracker & Finance Manager',
+        title: 'AGI Field Operations Portal',
         category: 'Full-stack',
-        description: 'A modern expense tracker with budgeting tools, trend charts, and cloud sync — inspired by Money Manager and Spendee.',
-        longDescription: 'A full-featured personal finance application built with Flutter and Firebase. Supports income/expense tracking with categorization, monthly budget management with visual progress bars and alerts, spending trend charts, pie chart visualizations, multi-currency support, biometric login, PDF report generation and export, dark mode, and offline-first architecture using Hive with Firebase Cloud Firestore synchronization.',
-        challenge: 'Implementing reliable offline-first data synchronization between local Hive storage and Cloud Firestore without data conflicts or loss.',
-        solution: 'Designed a synchronized queue system that caches writes locally when offline and replays them to Firestore once connectivity is restored, ensuring data integrity across sessions.',
-        techTags: ['Flutter', 'Dart', 'Riverpod', 'Firebase Auth', 'Cloud Firestore', 'Hive', 'fl_chart', 'PDF Gen'],
-        githubUrl: 'https://github.com/Ali-123-c/FINANCE_APP',
+        description: 'Cross-platform mobile application built with Flutter and .NET Core backend for field operations management and data collection.',
+        longDescription: 'Developed during the AGI internship as a cross-platform mobile solution that streamlines field operations. The Flutter frontend communicates with a .NET Core Web API backend for seamless data management and database operations. Features include real-time data synchronization, offline-capable forms for field data collection, role-based access control, and an admin dashboard for monitoring field activity. Built following clean architecture principles with a focus on performance optimization and code maintainability.',
+        challenge: 'Ensuring reliable data synchronization between mobile clients and the .NET Core backend under inconsistent network conditions while maintaining data integrity across concurrent field operations.',
+        solution: 'Implemented a robust retry-and-queue mechanism on the Flutter client that caches form submissions locally when offline and replays them to the .NET Core API once connectivity is restored, with SQL Server transaction guards preventing duplicate entries.',
+        techTags: ['Flutter', 'Dart', '.NET Core', 'C#', 'REST API', 'SQL Server', 'EF Core'],
+        githubUrl: 'https://github.com/Ali-123-c',
       ),
       const _ProjectData(
-        title: 'FieldOps Service Management',
+        title: 'TaskFlow Manager with FCM',
         category: 'Full-stack',
-        description: 'A cross-platform field service management app for assigning, tracking, and completing service requests with role-based access.',
-        longDescription: 'A comprehensive field service management solution built with Flutter and Supabase. Features a dual-role system with distinct Manager and Technician interfaces. Managers can create service requests, assign/reassign jobs to technicians, and oversee the entire team. Technicians can accept or reject jobs, update status through a strict workflow (Pending → Accepted → In Progress → Completed), and submit detailed service reports. Includes real-time notifications via FCM and Supabase Realtime subscriptions, offline-first caching with Hive, and PostgreSQL Row Level Security for data isolation between roles.',
-        challenge: 'Implementing real-time job status synchronization between managers and technicians with offline support while enforcing strict role-based data privacy.',
-        solution: 'Leveraged Supabase Realtime subscriptions for live job updates, Hive local caching for seamless offline resilience, and PostgreSQL RLS policies to isolate data access per role, ensuring each technician only sees their assigned jobs.',
-        techTags: ['Flutter', 'Dart', 'Supabase', 'Riverpod', 'GoRouter', 'FCM', 'Hive', 'PostgreSQL'],
-        githubUrl: 'https://github.com/Ali-123-c/-fieldops-app',
+        description: 'Production-ready task management application refactored with Provider architecture and Firebase Cloud Messaging real-time notifications.',
+        longDescription: 'A flagship internship project that refactored an existing Flutter codebase by implementing Provider state management architecture, reducing widget rebuild time by 25% and significantly improving app performance and maintainability. Integrated Firebase Cloud Messaging (FCM) for real-time push notifications, boosting user engagement by 20% and improving retention rates. Features include task scheduling, real-time status updates, Firestore cloud persistence, and offline state synchronization with background sync workers.',
+        challenge: 'Refactoring a monolithic Flutter codebase into a clean Provider-driven architecture without breaking existing functionality while simultaneously integrating Firebase Cloud Messaging for background push notifications.',
+        solution: 'Strategically decomposed the codebase into Provider-driven modules with dedicated ChangeNotifier classes, configured WorkManager hooks to handle FCM payloads on background threads, and used Firestore listeners to sync state across sessions.',
+        techTags: ['Flutter', 'Dart', 'Provider', 'Firebase FCM', 'Cloud Firestore', 'WorkManager'],
+        githubUrl: 'https://github.com/Ali-123-c',
       ),
       const _ProjectData(
-        title: 'GymFlow Management System',
-        category: 'Full-stack',
-        description: 'A comprehensive gym management system with fingerprint attendance tracking, member management, and payment processing.',
-        longDescription: 'GymFlow is a robust, full-stack gym management solution built with Next.js 15, TypeScript, and Supabase. It offers a complete suite of tools for gym administrators including member management, real-time attendance tracking via USB fingerprint integration, and payment processing. The system features a responsive dashboard providing an overview of total members, daily attendance, pending fees, and revenue.',
-        challenge: 'Integrating a local hardware device (USB fingerprint scanner) with a modern web application for seamless attendance logging.',
-        solution: 'Developed a local Python application that interfaces with the biometric scanner and communicates with the Next.js API routes, transmitting scan data to the Supabase backend in real-time.',
-        techTags: ['Next.js 15', 'TypeScript', 'Supabase', 'Tailwind CSS', 'Python', 'Biometrics'],
-        githubUrl: 'https://github.com/Ali-123-c/RockHardGym',
-      ),
-      const _ProjectData(
-        title: 'Lost & Found Campus Core (FYP)',
-        category: 'Full-stack',
-        description: 'Flagship Final Year Project combining a Flutter mobile client with a Clean Architecture .NET 8 backend ecosystem.',
-        longDescription: 'A landmark university Final Year Project (FYP) engineered to streamline lost object logging, automated algorithmic item matching, and unclaimed assets liquidation. Consists of a responsive Flutter mobile client for students and administrators, backed by a Clean Architecture .NET 8 Web API server coordinating SQL Server storage.',
-        challenge: 'Restricting concurrent modifications and preventing dirty-reads/overwrites (e.g. multiple admins approving claim matches simultaneously) while ensuring instantaneous matching notifications.',
-        solution: 'Implemented RowVersion concurrency token locking inside EF Core transactional pipelines, coupled with native provider states on the Flutter mobile client to guarantee strict lifecycle thread synchronization.',
-        techTags: ['Flutter', 'Dart', '.NET 8 Core', 'EF Core', 'SQL Server', 'Clean Architecture', 'Algorithmic Matching'],
-        githubUrl: 'https://github.com/Ali-123-c/LOST-AND-FOUND-APP-UNI-PROJECT',
-        secondaryUrl: 'https://github.com/Ali-123-c/LOST-AND-FOUND-APP-UNI-PROJECT/tree/main/Frontend',
-        secondaryText: 'Explore Frontend',
-      ),
-      const _ProjectData(
-        title: 'Advanced Task Manager (FCM)',
-        category: 'Full-stack',
-        description: 'Resilient task scheduler integrating Firebase Cloud Messaging (FCM), push alerts, and Firestore persistence.',
-        longDescription: 'Developed as a flagship capstone project during the internship program. This application orchestrates real-time task notifications using Firebase Cloud Messaging (FCM) backplanes, Firestore cloud databases, and offline state synchronization. Allows users to schedule, update, and receive immediate alerts for task status modifications.',
-        challenge: 'Implementing background sync workers that coordinate push message receipts and update local databases seamlessly without draining the device\'s battery resources.',
-        solution: 'Configured WorkManager hooks and streams that handle incoming FCM notification payloads on dedicated background threads, updating state providers dynamically.',
-        techTags: ['Flutter', 'Dart', 'Firebase FCM', 'Cloud Firestore', 'Riverpod', 'Android SDK'],
-        githubUrl: 'https://github.com/Ali-123-c/complete_code/tree/main/complete_code/final_project_2',
-      ),
-      const _ProjectData(
-        title: 'Cloud Auth & Firestore DB',
+        title: 'ShopCore REST API Backend',
         category: 'Backend',
-        description: 'Secure personal authentication pipeline wired to real-time Firestore database cloud synchronization hooks.',
-        longDescription: 'A cloud-connected security module leveraging Firebase Auth protocols (supporting email/password and secure tokens validation) paired with a real-time data storage backend in Cloud Firestore. Features automatic authentication state detection and real-time document listeners.',
-        challenge: 'Restricting cloud database reads and writes to authenticated owners while preserving low-latency synchronization.',
-        solution: 'Authored structured Firebase Security Rules validating user ID tokens on each document path, backed by local offline persistence queries.',
-        techTags: ['Flutter', 'Dart', 'Firebase Auth', 'Cloud Firestore', 'Security Rules'],
-        githubUrl: 'https://github.com/Ali-123-c/complete_code/tree/main/task_5',
-      ),
-      const _ProjectData(
-        title: 'REST API Client Integration',
-        category: 'Backend',
-        description: 'High-throughput API integrator querying RESTful service points with custom JSON serializers.',
-        longDescription: 'An API client integration pipeline engineered using the Dart http module. Implements custom request intercepts, automated token refresh logic, robust JSON serialization structures, and state-driven loaders to display fetched datasets in responsive list grids.',
-        challenge: 'Preventing UI threads from freezing during large JSON deserialization tasks on lower-end mobile handsets.',
-        solution: 'Moved high-payload serialization workflows to background threads using Flutter\'s compute isolates, ensuring a continuous 60fps scrolling experience.',
-        techTags: ['Flutter', 'Dart', 'HTTP REST API', 'JSON Serialization', 'Isolates', 'State Notifier'],
-        githubUrl: 'https://github.com/Ali-123-c/complete_code/tree/main/task_4',
-      ),
-      const _ProjectData(
-        title: 'Task Management CRUD Portal',
-        category: 'Android',
-        description: 'Feature-rich personal planner supporting local SQLite persistence, screen transitions, and splash gates.',
-        longDescription: 'An offline-first personal scheduler application designed during the internship core. Features custom animated splash gates, intuitive task categorization grids, full Create-Read-Update-Delete (CRUD) functions, and robust SQLite/SharedPreferences storage rules to maintain state across reboots.',
-        challenge: 'Building fluid custom animations for the landing splash screen that scale gracefully on tablets and standard phones alike.',
-        solution: 'Utilized Flutter\'s custom painters and the flutter_animate engine, configuring layout grids using dynamic MediaQueries.',
-        techTags: ['Flutter', 'Dart', 'SQLite', 'SharedPreferences', 'Custom Splash'],
-        githubUrl: 'https://github.com/Ali-123-c/complete_code/tree/main/final_project',
-      ),
-      const _ProjectData(
-        title: 'State & Local Storage Portal',
-        category: 'Android',
-        description: 'Resilient persistence portal integrating counter sessions and checklist schedulers utilizing SharedPreferences.',
-        longDescription: 'An Android-optimized utility designed to demonstrate state tracking and local storage architectures. Implements session management and lightweight checklist schedulers backed by asynchronous SharedPreferences caching.',
-        challenge: 'Maintaining reactive state bindings when updating counter values from nested, deep-tree widgets.',
-        solution: 'Implemented Riverpod notifier hooks to track local values, triggering asynchronous writes to disk off the main thread.',
-        techTags: ['Flutter', 'Dart', 'SharedPreferences', 'Riverpod', 'State Persistence'],
-        githubUrl: 'https://github.com/Ali-123-c/complete_code/tree/main/task_2',
-      ),
-      const _ProjectData(
-        title: 'Interactive Secure Gate',
-        category: 'Android',
-        description: 'Authenticating interface featuring validation forms, secure state caches, and navigation routes.',
-        longDescription: 'A production-ready onboarding interface built to demonstrate strict input validation rules. Employs comprehensive form validators, custom keyboard listeners, and secure route guard gates to filter incoming user access.',
-        challenge: 'Creating smooth, non-blocking UI validations for complex email/password patterns in real-time.',
-        solution: 'Implemented asynchronous streams that debounce keystrokes, executing regex validation rules only when typing pauses.',
-        techTags: ['Flutter', 'Dart', 'Form Validation', 'Route Guards', 'Streams'],
-        githubUrl: 'https://github.com/Ali-123-c/complete_code/tree/main/task_1',
+        description: 'Scalable .NET Core Web API with ASP.NET MVC architecture, Entity Framework Core, and SQL Server for e-commerce operations.',
+        longDescription: 'A robust backend API built with .NET Core and ASP.NET MVC following clean architecture and repository patterns. Features include complete CRUD operations for products, categories, orders, and users; JWT-based authentication with role-based authorization; middleware pipeline for request logging and error handling; Entity Framework Core with SQL Server for data persistence; and comprehensive input validation and API versioning. Designed with scalability in mind, the API supports pagination, filtering, and sorting for all list endpoints.',
+        challenge: 'Designing a clean, maintainable backend architecture that separates concerns across layers while enforcing strict validation rules and providing comprehensive API documentation.',
+        solution: 'Applied Repository Pattern with Unit of Work on top of Entity Framework Core, structured the solution into distinct layers (Controller, Service, Repository, Domain), and implemented FluentValidation rules with custom middleware for consistent error responses.',
+        techTags: ['C#', '.NET Core', 'ASP.NET MVC', 'EF Core', 'SQL Server', 'JWT Auth', 'REST API'],
+        githubUrl: 'https://github.com/Ali-123-c',
       ),
     ];
   }
@@ -620,9 +552,6 @@ class _ProjectData {
   final String solution;
   final List<String> techTags;
   final String githubUrl;
-  final String? secondaryUrl;
-  final String? secondaryText;
-
   const _ProjectData({
     required this.title,
     required this.category,
@@ -632,7 +561,5 @@ class _ProjectData {
     required this.solution,
     required this.techTags,
     required this.githubUrl,
-    this.secondaryUrl,
-    this.secondaryText,
   });
 }

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/theme/colors.dart';
 import '../../../core/widgets/glass_card.dart';
+import '../../../core/widgets/reveal_animation.dart';
 import 'hero_section.dart'; // For MaxWidthContainer
 
 class ExperienceSection extends StatelessWidget {
@@ -29,9 +30,12 @@ class ExperienceSection extends StatelessWidget {
             const SizedBox(height: 56),
 
             // Timeline Tree
-            isDesktop
-                ? _buildDesktopTimeline(experiences)
-                : _buildMobileTimeline(experiences),
+            RevealAnimation(
+              delayMilliseconds: 200,
+              child: isDesktop
+                  ? _buildDesktopTimeline(experiences)
+                  : _buildMobileTimeline(experiences),
+            ),
           ],
         ),
       ),

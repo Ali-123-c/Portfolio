@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/widgets/glass_card.dart';
 import '../../../core/widgets/glow_button.dart';
+import '../../../core/widgets/reveal_animation.dart';
 import '../providers/portfolio_providers.dart';
 import 'hero_section.dart'; // For MaxWidthContainer
 
@@ -89,22 +90,25 @@ class _ContactSectionState extends ConsumerState<ContactSection> {
             const SizedBox(height: 56),
 
             // Responsive Layout (Form on Left/Right, Social details adjacent)
-            isDesktop
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(flex: 7, child: _buildFormCard(formStatus)),
-                      const SizedBox(width: 56),
-                      Expanded(flex: 5, child: _buildDirectDetails(context)),
-                    ],
-                  )
-                : Column(
-                    children: [
-                      _buildFormCard(formStatus),
-                      const SizedBox(height: 48),
-                      _buildDirectDetails(context),
-                    ],
-                  ),
+            RevealAnimation(
+              delayMilliseconds: 200,
+              child: isDesktop
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(flex: 7, child: _buildFormCard(formStatus)),
+                        const SizedBox(width: 56),
+                        Expanded(flex: 5, child: _buildDirectDetails(context)),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        _buildFormCard(formStatus),
+                        const SizedBox(height: 48),
+                        _buildDirectDetails(context),
+                      ],
+                    ),
+            ),
           ],
         ),
       ),

@@ -4,32 +4,34 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/theme/colors.dart';
+import '../../../core/widgets/geometric_3d_shape.dart';
 import '../../../core/widgets/glow_button.dart';
 
 class HeroSection extends StatelessWidget {
   final VoidCallback onExploreProjects;
   final VoidCallback onResumePressed;
+  final VoidCallback? onHireMe;
 
   const HeroSection({
     super.key,
     required this.onExploreProjects,
     required this.onResumePressed,
+    this.onHireMe,
   });
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isDesktop = size.width >= 900;
-    // Keep it responsive but ensure enough height for Hero
     final sectionHeight = size.height < 700 ? 700.0 : size.height;
 
     return Container(
-      height: isDesktop ? sectionHeight : null, // Wrap content on mobile!
+      height: isDesktop ? sectionHeight : null,
       width: double.infinity,
       padding: EdgeInsets.only(
         left: 24,
         right: 24,
-        top: isDesktop ? 0 : 140, // Push content down below floating AppBar on mobile
+        top: isDesktop ? 0 : 140,
         bottom: isDesktop ? 0 : 60,
       ),
       alignment: Alignment.center,
@@ -46,16 +48,15 @@ class HeroSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _build3DCanvas(context, false), // No Expanded on mobile!
+                  _build3DCanvas(context, false),
                   const SizedBox(height: 32),
-                  _buildTypography(context, false), // No Expanded on mobile!
+                  _buildTypography(context, false),
                 ],
               ),
       ),
     );
   }
 
-  // Left Column - Text Details & Action Buttons
   Widget _buildTypography(BuildContext context, bool isDesktop) {
     final align = isDesktop ? CrossAxisAlignment.start : CrossAxisAlignment.center;
     final textAlign = isDesktop ? TextAlign.left : TextAlign.center;
@@ -85,36 +86,37 @@ class HeroSection extends StatelessWidget {
         
         const SizedBox(height: 24),
         
-        // Large Name Header
-        RichText(
-          textAlign: textAlign,
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: "HI, I'M ",
-                style: GoogleFonts.spaceGrotesk(
-                  fontSize: isDesktop ? 60 : 42,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                  letterSpacing: -1,
+        // Large Name Header with gradient shimmer
+        ShaderMask(
+          shaderCallback: (bounds) => LinearGradient(
+            colors: [Colors.white, AppColors.cyanAccent.withValues(alpha: 0.8)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ).createShader(bounds),
+          child: RichText(
+            textAlign: textAlign,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: "HI, I'M ",
+                  style: GoogleFonts.spaceGrotesk(
+                    fontSize: isDesktop ? 64 : 42,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                    letterSpacing: -1,
+                  ),
                 ),
-              ),
-              TextSpan(
-                text: "ALI",
-                style: GoogleFonts.spaceGrotesk(
-                  fontSize: isDesktop ? 60 : 42,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.cyanAccent,
-                  letterSpacing: -1,
-                  shadows: [
-                    Shadow(
-                      color: AppColors.cyanAccent.withValues(alpha: 0.5),
-                      blurRadius: 20,
-                    ),
-                  ],
+                TextSpan(
+                  text: "ALI",
+                  style: GoogleFonts.spaceGrotesk(
+                    fontSize: isDesktop ? 64 : 42,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    letterSpacing: -1,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ).animate().fadeIn(delay: 200.ms, duration: 600.ms).slideY(begin: 0.2, end: 0, curve: Curves.easeOutBack),
         
@@ -122,10 +124,10 @@ class HeroSection extends StatelessWidget {
         
         // Title Subtitle
         Text(
-          'Flutter Mobile Developer | Building Exceptional Android Experiences',
+          'Flutter Mobile Developer  •  C# Backend Engineer  •  UI Architect',
           textAlign: textAlign,
           style: GoogleFonts.spaceGrotesk(
-            fontSize: isDesktop ? 22 : 16,
+            fontSize: isDesktop ? 20 : 16,
             fontWeight: FontWeight.w600,
             color: AppColors.textSecondary,
             letterSpacing: -0.5,
@@ -159,20 +161,39 @@ class HeroSection extends StatelessWidget {
               onPressed: onExploreProjects,
             ),
             GlowButton(
-              text: 'Resume',
+              text: 'View Resume',
               icon: FontAwesomeIcons.download,
               isSecondary: true,
               onPressed: onResumePressed,
             ),
+            if (isDesktop)
+              GlowButton(
+                text: 'Hire Me',
+                icon: FontAwesomeIcons.handshake,
+                color: AppColors.purpleAccent,
+                onPressed: onHireMe ?? () {},
+              ),
           ],
         ).animate().fadeIn(delay: 800.ms, duration: 600.ms).slideY(begin: 0.2, end: 0, curve: Curves.easeOutBack),
       ],
     );
   }
 
-  // Right Column - Interactive 3D Avatar Canvas
   Widget _build3DCanvas(BuildContext context, bool isDesktop) {
-    return _Interactive3DAvatarCanvas(isDesktop: isDesktop);
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // 3D Geometric rotating shape (background layer)
+        if (isDesktop)
+          Geometric3DShape(
+            size: 320,
+            primaryColor: AppColors.cyanAccent,
+            secondaryColor: AppColors.purpleAccent,
+          ),
+        // Avatar canvas on top
+        _Interactive3DAvatarCanvas(isDesktop: isDesktop),
+      ],
+    );
   }
 }
 
@@ -192,24 +213,19 @@ class _Interactive3DAvatarCanvasState extends State<_Interactive3DAvatarCanvas> 
   bool _isHovered = false;
 
   void _onPointerMove(PointerEvent event) {
-    if (!widget.isDesktop) return; // Only apply tilt on desktop cursor hover
-
+    if (!widget.isDesktop) return;
     final size = context.size;
     if (size == null) return;
-
     final centerX = size.width / 2;
     final centerY = size.height / 2;
-
     setState(() {
-      _tiltX = (event.localPosition.dy - centerY) / centerY * 0.12; // Dynamic 3D tilt X
-      _tiltY = -(event.localPosition.dx - centerX) / centerX * 0.12; // Dynamic 3D tilt Y
+      _tiltX = (event.localPosition.dy - centerY) / centerY * 0.12;
+      _tiltY = -(event.localPosition.dx - centerX) / centerX * 0.12;
     });
   }
 
   void _onPointerEnter(PointerEvent event) {
-    setState(() {
-      _isHovered = true;
-    });
+    setState(() => _isHovered = true);
   }
 
   void _onPointerExit(PointerEvent event) {
@@ -230,46 +246,40 @@ class _Interactive3DAvatarCanvasState extends State<_Interactive3DAvatarCanvas> 
       onExit: _onPointerExit,
       onHover: _onPointerMove,
       child: Center(
-        child: AnimatedRotation(
-          turns: _isHovered ? 0.015 : 0.0,
+        child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          child: Transform(
-            alignment: Alignment.center,
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.001) // 3D Perspective Warp entry
-              ..rotateX(_tiltX)
-              ..rotateY(_tiltY),
-            child: RepaintBoundary(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                // 1. Outer Neon Cyan Orbiting Ring
-                Container(
-                  width: canvasSize,
-                  height: canvasSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.cyanAccent.withValues(alpha: _isHovered ? 0.22 : 0.08),
-                      width: 1.5,
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001)
+            ..rotateX(_tiltX)
+            ..rotateY(_tiltY),
+          child: RepaintBoundary(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // Orbiting outer rings
+                ...List.generate(3, (i) {
+                  final ringSize = canvasSize - (i * 20);
+                  final isEven = i.isEven;
+                  return Container(
+                    width: ringSize,
+                    height: ringSize,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: (isEven ? AppColors.cyanAccent : AppColors.purpleAccent)
+                            .withValues(alpha: _isHovered ? 0.22 - i * 0.04 : 0.08 - i * 0.02),
+                        width: 1.5 - i * 0.3,
+                      ),
                     ),
-                  ),
-                ).animate(onPlay: (c) => c.repeat()).rotate(duration: 25.seconds),
+                  ).animate(onPlay: (c) => c.repeat())
+                    .rotate(
+                      duration: (25 - i * 5).seconds, 
+                      begin: isEven ? 0.0 : 1.0, 
+                      end: isEven ? 1.0 : 0.0,
+                    );
+                }),
 
-                // 2. Inner Neon Purple Orbiting Ring (Counter-rotating)
-                Container(
-                  width: canvasSize - 35,
-                  height: canvasSize - 35,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.purpleAccent.withValues(alpha: _isHovered ? 0.16 : 0.06),
-                      width: 1,
-                    ),
-                  ),
-                ).animate(onPlay: (c) => c.repeat()).rotate(duration: 20.seconds, begin: 1.0, end: 0.0),
-
-                // 3. Cyberpunk Radial Glow Backdrop
+                // Glow backdrop
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   width: avatarSize + 25,
@@ -278,20 +288,20 @@ class _Interactive3DAvatarCanvasState extends State<_Interactive3DAvatarCanvas> 
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.cyanAccent.withValues(alpha: _isHovered ? 0.26 : 0.08),
-                        blurRadius: _isHovered ? 40 : 25,
-                        spreadRadius: 2,
+                        color: AppColors.cyanAccent.withValues(alpha: _isHovered ? 0.3 : 0.1),
+                        blurRadius: _isHovered ? 50 : 25,
+                        spreadRadius: _isHovered ? 4 : 1,
                       ),
                       BoxShadow(
-                        color: AppColors.purpleAccent.withValues(alpha: _isHovered ? 0.18 : 0.04),
-                        blurRadius: _isHovered ? 30 : 15,
+                        color: AppColors.purpleAccent.withValues(alpha: _isHovered ? 0.2 : 0.05),
+                        blurRadius: _isHovered ? 40 : 15,
                         spreadRadius: -2,
                       ),
                     ],
                   ),
                 ),
 
-                // 4. The 3D Floating Avatar Sphere
+                // Avatar with floating animation
                 Container(
                   width: avatarSize,
                   height: avatarSize,
@@ -300,9 +310,9 @@ class _Interactive3DAvatarCanvasState extends State<_Interactive3DAvatarCanvas> 
                     border: Border.all(color: AppColors.cyanAccent, width: 2.5),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.cyanAccent.withValues(alpha: 0.15),
-                        blurRadius: 15,
-                        spreadRadius: 1,
+                        color: AppColors.cyanAccent.withValues(alpha: 0.2),
+                        blurRadius: 20,
+                        spreadRadius: 2,
                       ),
                     ],
                     image: const DecorationImage(
@@ -312,7 +322,7 @@ class _Interactive3DAvatarCanvasState extends State<_Interactive3DAvatarCanvas> 
                   ),
                 )
                 .animate(onPlay: (controller) => controller.repeat(reverse: true))
-                .moveY(begin: -8, end: 8, duration: 3.seconds, curve: Curves.easeInOut)
+                .moveY(begin: -10, end: 10, duration: 3.seconds, curve: Curves.easeInOut)
                 .animate()
                 .scale(delay: 200.ms, duration: 600.ms, curve: Curves.easeOutBack),
               ],
@@ -320,12 +330,10 @@ class _Interactive3DAvatarCanvasState extends State<_Interactive3DAvatarCanvas> 
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
 
-// Utility widget to enforce clean layout constraints
 class MaxWidthContainer extends StatelessWidget {
   final Widget child;
   final double maxWidth;

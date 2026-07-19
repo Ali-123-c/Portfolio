@@ -6,9 +6,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/colors.dart';
 import '../../../core/widgets/glass_card.dart';
+import '../../../core/widgets/particle_background.dart';
+import '../../../core/widgets/scroll_to_top_button.dart';
 import '../providers/portfolio_providers.dart';
 
-// Section widgets import (we will create these next)
+// Section widgets import
 import '../sections/hero_section.dart';
 import '../sections/about_section.dart';
 import '../sections/skills_section.dart';
@@ -25,7 +27,7 @@ class PortfolioScreen extends ConsumerStatefulWidget {
 
 class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
   final ScrollController _scrollController = ScrollController();
-  
+
   // Setup Global Keys for each section to measure coordinates for scroll-snaps
   final Map<String, GlobalKey> _sectionKeys = {
     'home': GlobalKey(),
@@ -67,15 +69,13 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
       final key = entry.value;
       final sectionName = entry.key;
       final context = key.currentContext;
-      
+
       if (context != null) {
         final box = context.findRenderObject() as RenderBox?;
         if (box != null) {
           final position = box.localToGlobal(Offset.zero);
-          // Distance from the top of the viewport
           final distance = position.dy.abs();
-          
-          // Section is considered visible if its top boundary is near the top half of the screen
+
           if (position.dy <= 300 && distance < minDistance) {
             minDistance = distance;
             currentSection = sectionName;
@@ -89,11 +89,14 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
     }
   }
 
-  // Smooth scroll method targeting specific section keys
+  void _scrollToContact() {
+    _scrollToSection('contact');
+  }
+
   void _scrollToSection(String sectionName) {
     final key = _sectionKeys[sectionName];
     if (key == null) return;
-    
+
     final context = key.currentContext;
     if (context != null) {
       Scrollable.ensureVisible(
@@ -101,6 +104,13 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
         duration: const Duration(milliseconds: 1000),
         curve: Curves.easeInOutCubic,
       );
+    }
+  }
+
+  void _downloadCV() async {
+    final Uri url = Uri.parse('assets/documents/Ali Haider.pdf');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
     }
   }
 
@@ -112,7 +122,6 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       extendBodyBehindAppBar: true,
-      // Custom drawer for mobile layouts
       drawer: isMobile ? _buildMobileDrawer(activeSection) : null,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(100),
@@ -120,59 +129,36 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
       ),
       body: Stack(
         children: [
-          // Cyber Space Particle/Grid Background
-          _buildFuturisticBackground(),
-          
-          // Primary Scroll View
-          SingleChildScrollView(
-            controller: _scrollController,
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                // Sections with keys for routing target offsets
-                HeroSection(
-                  key: _sectionKeys['home'],
-                  onExploreProjects: () => _scrollToSection('projects'),
-                  onResumePressed: () => _launchURL('/assets/documents/Resume.pdf'),
-                ),
-                AboutSection(key: _sectionKeys['about']),
-                SkillsSection(key: _sectionKeys['skills']),
-                ProjectsSection(key: _sectionKeys['projects']),
-                ExperienceSection(key: _sectionKeys['experience']),
-                ContactSection(key: _sectionKeys['contact']),
-                _buildFooter(),
-              ],
+          ParticleBackground(
+            enableParallax: true,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  HeroSection(
+                    key: _sectionKeys['home'],
+                    onExploreProjects: () => _scrollToSection('projects'),
+                    onResumePressed: _downloadCV,
+                    onHireMe: _scrollToContact,
+                  ),
+                  AboutSection(key: _sectionKeys['about']),
+                  SkillsSection(key: _sectionKeys['skills']),
+                  ProjectsSection(key: _sectionKeys['projects']),
+                  ExperienceSection(key: _sectionKeys['experience']),
+                  ContactSection(key: _sectionKeys['contact']),
+                  _buildFooter(),
+                ],
+              ),
             ),
           ),
+          // Floating Back to Top button
+          Positioned(
+            right: 24,
+            bottom: 32,
+            child: ScrollToTopButton(scrollController: _scrollController),
+          ),
         ],
-      ),
-    );
-  }
-
-  // High-Tech Star/Grid Backdrop Custom Painter
-  Widget _buildFuturisticBackground() {
-    return Positioned.fill(
-      child: Container(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment(0.5, -0.6),
-            radius: 1.2,
-            colors: [
-              AppColors.darkPurple,
-              AppColors.background,
-            ],
-            stops: [0.0, 0.8],
-          ),
-        ),
-        child: Opacity(
-          opacity: 0.15,
-          child: GridPaper(
-            color: AppColors.cyanAccent.withValues(alpha: 0.2),
-            divisions: 1,
-            subdivisions: 1,
-            interval: 120,
-          ),
-        ),
       ),
     );
   }
@@ -188,7 +174,6 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Branding Logo
             MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
@@ -217,8 +202,6 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
                 ),
               ),
             ),
-
-            // Desktop Links or Hamburger Button
             if (isMobile)
               Builder(
                 builder: (context) => IconButton(
@@ -249,7 +232,6 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
     );
   }
 
-  // Glassmorphic Navlink widget with subtle hover/focus effects
   Widget _buildNavLink(String text, bool isActive, VoidCallback onTap) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -280,7 +262,6 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
     );
   }
 
-  // Translucent Slide-out Drawer for Tablets/Phones
   Widget _buildMobileDrawer(String activeSection) {
     return Drawer(
       backgroundColor: AppColors.background.withValues(alpha: 0.95),
@@ -368,7 +349,6 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
     );
   }
 
-  // Footer Section
   Widget _buildFooter() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
@@ -382,7 +362,7 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-    IconButton(
+                IconButton(
                   icon: const FaIcon(FontAwesomeIcons.github, color: AppColors.textSecondary, size: 20),
                   onPressed: () => _launchURL('https://github.com/Ali-123-c'),
                 ),

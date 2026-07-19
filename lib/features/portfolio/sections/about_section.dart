@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/theme/colors.dart';
 import '../../../core/widgets/glass_card.dart';
+import '../../../core/widgets/reveal_animation.dart';
 import 'hero_section.dart'; // For MaxWidthContainer
 
 class AboutSection extends StatelessWidget {
@@ -28,22 +29,25 @@ class AboutSection extends StatelessWidget {
             const SizedBox(height: 48),
 
             // Responsive Layout Grid
-            isDesktop
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(flex: 7, child: _buildBioDescription(context)),
-                      const SizedBox(width: 48),
-                      Expanded(flex: 5, child: _buildMetricsGrid(context)),
-                    ],
-                  )
-                : Column(
-                    children: [
-                      _buildBioDescription(context),
-                      const SizedBox(height: 40),
-                      _buildMetricsGrid(context),
-                    ],
-                  ),
+            RevealAnimation(
+              delayMilliseconds: 200,
+              child: isDesktop
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(flex: 7, child: _buildBioDescription(context)),
+                        const SizedBox(width: 48),
+                        Expanded(flex: 5, child: _buildMetricsGrid(context)),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        _buildBioDescription(context),
+                        const SizedBox(height: 40),
+                        _buildMetricsGrid(context),
+                      ],
+                    ),
+            ),
           ],
         ),
       ),
