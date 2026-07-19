@@ -111,12 +111,8 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
   }
 
   void _downloadCV() {
-    final anchor = html.AnchorElement(
-      href: Uri.encodeFull('assets/documents/Ali Haider.pdf'),
-    )
-      ..target = '_blank'
-      ..download = 'Ali_Haider_Qadri_CV.pdf';
-    anchor.click();
+    final pdfUrl = Uri.encodeFull('assets/documents/Ali Haider.pdf');
+    html.window.open(pdfUrl, '_blank');
   }
 
   @override
