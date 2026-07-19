@@ -1,7 +1,10 @@
 // ignore_for_file: deprecated_member_use, avoid_web_libraries_in_flutter
 
+import 'dart:convert';
 import 'dart:html' as html;
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -110,9 +113,17 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
     }
   }
 
-  void _downloadCV() {
-    final pdfUrl = Uri.encodeFull('assets/documents/Ali Haider.pdf');
-    html.window.open(pdfUrl, '_blank');
+  Future<void> _downloadCV() async {
+    try {
+      final ByteData data = await rootBundle.load('assets/documents/Ali Haider.pdf');
+      final Uint8List bytes = data.buffer.asUint8List();
+      final base64Str = base64Encode(bytes);
+      final dataUrl = 'data:application/pdf;base64,$base64Str';
+      html.window.open(dataUrl, '_blank');
+    } catch (_) {
+      // Fallback: navigate directly to asset
+      html.window.location.href = Uri.encodeFull('assets/documents/Ali Haider.pdf');
+    }
   }
 
   @override
