@@ -112,7 +112,7 @@ class _PortfolioScreenState extends ConsumerState<PortfolioScreen> {
 
   void _downloadCV() {
     final anchor = html.AnchorElement(
-      href: 'assets/documents/Ali Haider.pdf',
+      href: Uri.encodeFull('assets/documents/Ali Haider.pdf'),
     )
       ..target = '_blank'
       ..download = 'Ali_Haider_Qadri_CV.pdf';
